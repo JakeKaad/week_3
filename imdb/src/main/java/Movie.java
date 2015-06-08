@@ -16,7 +16,17 @@ public class Movie {
 
   public Movie(String name) {
     this.name = name;
-    id = save(name);
+  }
+
+  @Override
+  public boolean equals(Object otherMovie){
+    if (!(otherMovie instanceof Movie)) {
+      return false;
+    } else {
+      Movie newMovie = (Movie) otherMovie;
+      return this.getName().equals(newMovie.getName()) &&
+             this.getId() == newMovie.getId();
+    }
   }
 
   public static List<Movie> all() {
@@ -26,14 +36,13 @@ public class Movie {
     }
   }
 
-  public int save(String name) {
+  public void save() {
     try(Connection con = DB.sql2o.open()) {
       String sql = "INSERT INTO Movies(name) VALUES (:name)";
-      int id = (int) con.createQuery(sql, true)
+      this.id = (int) con.createQuery(sql, true)
         .addParameter("name", name)
         .executeUpdate()
         .getKey();
-        return id;
     }
   }
 

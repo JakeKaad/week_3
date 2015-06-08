@@ -22,11 +22,11 @@ public class AppTest extends FluentTest {
   @Rule
   public DataBaseRule database = new DataBaseRule();
 
-  @Test
-  public void categoryRoute_displaysCategoryName() {
-    Category myCategory = new Category("Household chores");
-    String categoryPath = String.format("http://localhost:4567/%d", myCategory.getId());
-    goTo(categoryPath);
-    assertThat(pageSource()).contains("Household chores");
-  }
+  // @Test
+  // public void categoryRoute_displaysCategoryName() {
+  //   Category myCategory = new Category("Household chores");
+  //   String categoryPath = String.format("http://localhost:4567/%d", myCategory.getId());
+  //   goTo(categoryPath);
+  //   assertThat(pageSource()).contains("Household chores");
+  // }
 }

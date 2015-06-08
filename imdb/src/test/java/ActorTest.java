@@ -7,38 +7,48 @@ public class ActorTest {
   public DataBaseRule database = new DataBaseRule();
 
   @Test
-  public void all_savesIntoDatabase_true() {
-    Actor myActor = new Actor("Angelina Jolie");
-    assertEquals(Actor.all().get(0).getName(), "Angelina Jolie");
+  public void all_emptyAtFirst() {
+    assertEquals(Actor.all().size(), 0);
   }
 
   @Test
-  public void find_returnsAActor() {
-    Actor myActor = new Actor("Angelina Jolie");
-    Actor otherActor = new Actor("Jesse Eisenberg");
-    assertEquals(Actor.find(otherActor.getId()).getName(), "Jesse Eisenberg");
+  public void equals_returnsTrueIfDescriptionsAretheSame() {
+    Actor firstActor = new Actor("Mow the lawn");
+    Actor secondActor = new Actor("Mow the lawn");
+    assertTrue(firstActor.equals(secondActor));
   }
 
   @Test
-  public void update_updatesActorsInDatabase() {
-    Actor myActor = new Actor("Angelina Jolie");
-    myActor.update("Jesse Eisenberg");
-    assertEquals(Actor.find(myActor.getId()).getName(), "Jesse Eisenberg");
+  public void save_savesObjectIntoDatabase() {
+    Actor myActor = new Actor("Mow the lawn");
+    myActor.save();
+    Actor savedActor = Actor.all().get(0);
+    assertTrue(savedActor.equals(myActor));
   }
 
   @Test
-  public void delete_removesAActorFromDatabase() {
-    Actor myActor = new Actor("Angelina Jolie");
-    Actor otherActor = new Actor("Jesse Eisenberg");
-    myActor.delete();
-    assertEquals(Actor.all().size(), 1);
+  public void save_assignsIdToObject() {
+    Actor myActor = new Actor("Mow the lawn");
+    myActor.save();
+    Actor savedActor = Actor.all().get(0);
+    assertEquals(myActor.getId(), savedActor.getId());
+  }
+
+  @Test
+  public void find_findsActorInDatabase_true() {
+    Actor myActor = new Actor("Mow the lawn");
+    myActor.save();
+    Actor savedActor = Actor.find(myActor.getId());
+    assertTrue(myActor.equals(savedActor));
   }
 
   @Test
   public void update_allowsAssociationToAMovie() {
     Movie myMovie = new Movie("Hackers");
+    myMovie.save();
     Actor myActor = new Actor("Angelina Jolie");
+    myActor.save();
     myActor.update(myMovie.getId());
-    assertEquals(myActor.movies().get(0).getName(), myMovie.getName());
+    assertTrue(myActor.movies().get(0).equals(myMovie));
   }
 }

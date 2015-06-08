@@ -16,8 +16,19 @@ public class Actor {
 
   public Actor(String name) {
     this.name = name;
-    id = save(name);
   }
+
+  @Override
+  public boolean equals(Object otherActor){
+    if (!(otherActor instanceof Actor)) {
+      return false;
+    } else {
+      Actor newActor = (Actor) otherActor;
+      return this.getName().equals(newActor.getName()) &&
+             this.getId() == newActor.getId();
+    }
+  }
+
 
   public static List<Actor> all() {
     String sql = "SELECT id, name FROM actors";
@@ -26,14 +37,13 @@ public class Actor {
     }
   }
 
-  public int save(String name) {
+  public void save() {
     try(Connection con = DB.sql2o.open()) {
       String sql = "INSERT INTO actors(name) VALUES (:name)";
-      int id = (int) con.createQuery(sql, true)
+      this.id = (int) con.createQuery(sql, true)
         .addParameter("name", name)
         .executeUpdate()
         .getKey();
-        return id;
     }
   }
 

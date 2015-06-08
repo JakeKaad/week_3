@@ -21,25 +21,38 @@ public class Task {
   public Task(String description, int categoryId) {
     this.description = description;
     this.categoryId = categoryId;
-    id = save(description, categoryId);
   }
 
+  @Override
+  public boolean equals(Object otherTask){
+    if (!(otherTask instanceof Task)) {
+      return false;
+    } else {
+      Task newTask = (Task) otherTask;
+      System.out.println(this.getCategoryId());
+      System.out.println(newTask.getCategoryId());
+      return this.getDescription().equals(newTask.getDescription()) &&
+             this.getId() == newTask.getId() &&
+             this.getCategoryId() == newTask.getCategoryId();
+    }
+  }
+
+
   public static List<Task> all() {
-    String sql = "SELECT id, description FROM Tasks";
+    String sql = "SELECT id, description, categoryId FROM Tasks";
     try(Connection con = DB.sql2o.open()) {
       return con.createQuery(sql).executeAndFetch(Task.class);
     }
   }
 
-  public int save(String description, int categoryId) {
+  public void save() {
     try(Connection con = DB.sql2o.open()) {
       String sql = "INSERT INTO Tasks(description, categoryId) VALUES (:description, :categoryId)";
-      int id = (int) con.createQuery(sql, true)
+      this.id = (int) con.createQuery(sql, true)
         .addParameter("description", description)
         .addParameter("categoryId", categoryId)
         .executeUpdate()
         .getKey();
-        return id;
     }
   }
 

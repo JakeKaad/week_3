@@ -34,6 +34,7 @@ public class App {
       HashMap<String, Object> model = new HashMap<String, Object>();
       String name = request.queryParams("name");
       Actor newActor = new Actor(name);
+      newActor.save();
       model.put("actor", newActor);
       model.put("movies", Movie.all());
       model.put("template", "templates/actor-info.vtl");
@@ -44,6 +45,7 @@ public class App {
       HashMap<String, Object> model = new HashMap<String, Object>();
       String name = request.queryParams("name");
       Movie newMovie = new Movie(name);
+      newMovie.save();
       model.put("movie", newMovie);
       model.put("actors", Actor.all());
       model.put("template", "templates/movie-info.vtl");

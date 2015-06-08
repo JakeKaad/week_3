@@ -31,6 +31,7 @@ public class AppTest extends FluentTest {
   @Test
   public void actorsDisplayedOnIndex() {
     Actor testActor = new Actor("Angelina Jolie");
+    testActor.save();
     goTo("http://localhost:4567/");
     assertThat(pageSource()).contains("Angelina Jolie");
   }
@@ -38,13 +39,15 @@ public class AppTest extends FluentTest {
   @Test
   public void moviesDisplayedOnIndex() {
     Movie testMovie = new Movie("Hackers");
+    testMovie.save();
     goTo("http://localhost:4567/");
     assertThat(pageSource()).contains("Hackers");
   }
-
+  //
   @Test
   public void actorsDisplayedOnActorsPage() {
     Actor testActor = new Actor("Angelina Jolie");
+    testActor.save();
     goTo("http://localhost:4567/");
     click("a", withText("Add a new actor"));
     assertThat(pageSource()).contains("Angelina Jolie");
@@ -55,10 +58,11 @@ public class AppTest extends FluentTest {
     goTo("http://localhost:4567/actors");
     assertThat(pageSource()).contains("Add actor");
   }
-
+  //
   @Test
   public void moviesDisplayedOnMoviesPage() {
     Movie testMovie = new Movie("Hackers");
+    testMovie.save();
     goTo("http://localhost:4567/");
     click("a", withText("Add a new movie"));
     assertThat(pageSource()).contains("Hackers");
@@ -69,7 +73,7 @@ public class AppTest extends FluentTest {
     goTo("http://localhost:4567/movies");
     assertThat(pageSource()).contains("Add movie");
   }
-
+  //
   @Test
   public void actorsCanBeAddedByUsers() {
     goTo("http://localhost:4567/actors");
@@ -87,11 +91,13 @@ public class AppTest extends FluentTest {
     assertThat(pageSource()).contains("Hackers");
     assertThat(pageSource()).contains("There are no actors yet!");
   }
-
+  //
   @Test
   public void actorsCanBeAddedToMovies() {
     Movie testMovie = new Movie("Hackers");
+    testMovie.save();
     Actor testActor = new Actor("Angelina Jolie");
+    testActor.save();
     String moviePath = String.format("http://localhost:4567/movies/%d", testMovie.getId());
     goTo(moviePath);
     String actorCheckBox = String.format("#actor-%d", testActor.getId());

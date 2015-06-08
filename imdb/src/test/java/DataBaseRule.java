@@ -4,7 +4,7 @@ import org.sql2o.*;
 public class DataBaseRule extends ExternalResource {
 
   protected void before() {
-    DB.sql2o = new Sql2o("jdbc:postgresql://localhost:5432/i_m_d_b_test", "jake", "password");
+    DB.sql2o = new Sql2o("jdbc:postgresql://localhost:5432/i_m_d_b_test", null, null);
    }
 
   protected void after() {

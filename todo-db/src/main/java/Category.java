@@ -14,7 +14,7 @@ public class Category {
   }
 
   public Category(String name) {
-    id = save(name);
+    this.name = name;
   }
 
   public static List<Category> all() {
@@ -24,14 +24,23 @@ public class Category {
     }
   }
 
-  public int save(String name) {
+  @Override
+  public boolean equals(Object otherCategory){
+    if (!(otherCategory instanceof Category)) {
+      return false;
+    } else {
+      Category newCategory = (Category) otherCategory;
+      return this.getName().equals(newCategory.getName());
+    }
+  }
+
+  public void save() {
     try(Connection con = DB.sql2o.open()) {
       String sql = "INSERT INTO Categories(name) VALUES (:name)";
-      int id = (int) con.createQuery(sql, true)
-        .addParameter("name", name)
+      this.id = (int) con.createQuery(sql, true)
+        .addParameter("name", this.name)
         .executeUpdate()
         .getKey();
-        return id;
     }
   }
 

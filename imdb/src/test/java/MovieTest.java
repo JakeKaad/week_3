@@ -7,38 +7,49 @@ public class MovieTest {
   public DataBaseRule database = new DataBaseRule();
 
   @Test
-  public void all_savesIntoDatabase_true() {
-    Movie myMovie = new Movie("Hackers");
-    assertEquals(Movie.all().get(0).getName(), "Hackers");
+  public void all_emptyAtFirst() {
+    assertEquals(Movie.all().size(), 0);
   }
 
   @Test
-  public void find_returnsAMovie() {
-    Movie myMovie = new Movie("Hackers");
-    Movie otherMovie = new Movie("The Social Network");
-    assertEquals(Movie.find(otherMovie.getId()).getName(), "The Social Network");
+  public void equals_returnsTrueIfDescriptionsAretheSame() {
+    Movie firstMovie = new Movie("Mow the lawn");
+    Movie secondMovie = new Movie("Mow the lawn");
+    assertTrue(firstMovie.equals(secondMovie));
   }
 
   @Test
-  public void update_updatesMoviesInDatabase() {
-    Movie myMovie = new Movie("Hackers");
-    myMovie.update("The Social Network");
-    assertEquals(Movie.find(myMovie.getId()).getName(), "The Social Network");
+  public void save_savesObjectIntoDatabase() {
+    Movie myMovie = new Movie("Mow the lawn");
+    myMovie.save();
+    Movie savedMovie = Movie.all().get(0);
+    assertTrue(savedMovie.equals(myMovie));
+  }
+
+  @Test
+  public void save_assignsIdToObject() {
+    Movie myMovie = new Movie("Mow the lawn");
+    myMovie.save();
+    Movie savedMovie = Movie.all().get(0);
+    assertEquals(myMovie.getId(), savedMovie.getId());
+  }
+
+  @Test
+  public void find_findsMovieInDatabase_true() {
+    Movie myMovie = new Movie("Mow the lawn");
+    myMovie.save();
+    Movie savedMovie = Movie.find(myMovie.getId());
+    assertTrue(myMovie.equals(savedMovie));
   }
 
   @Test
   public void update_allowsAssociationToAMovie() {
     Movie myMovie = new Movie("Hackers");
+    myMovie.save();
     Actor myActor = new Actor("Angelina Jolie");
+    myActor.save();
     myMovie.update(myActor.getId());
-    assertEquals(myMovie.actors().get(0).getName(), myActor.getName());
+    assertTrue(myMovie.actors().get(0).equals(myActor));
   }
 
-  @Test
-  public void delete_removesAMovieFromDatabase() {
-    Movie myMovie = new Movie("Hackers");
-    Movie otherMovie = new Movie("The Social Network");
-    myMovie.delete();
-    assertEquals(Movie.all().size(), 1);
-  }
 }
