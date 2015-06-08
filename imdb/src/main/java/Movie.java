@@ -69,8 +69,12 @@ public class Movie {
 
   public void delete() {
     try(Connection con = DB.sql2o.open()) {
-    String sql = "DELETE FROM Movies WHERE id = :id;";
-      con.createQuery(sql)
+    String movieQuery = "DELETE FROM Movies WHERE id = :id;";
+      con.createQuery(movieQuery)
+        .addParameter("id", id)
+        .executeUpdate();
+    String joinQuery = "DELETE FROM actors_movies WHERE movieId = :id";
+      con.createQuery(joinQuery)
         .addParameter("id", id)
         .executeUpdate();
     }

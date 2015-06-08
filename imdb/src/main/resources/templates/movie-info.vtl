@@ -1,0 +1,35 @@
+<h1>$movie.getName()</h1>
+
+<h3>Select all actors who starred in this movie:</h3>
+
+#if($actors)
+  <form action="/movies/$movie.getId()" method="post">
+    <input type="hidden" name="_method" value="put" />
+
+    #foreach($actor in $actors)
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" name="actor-ids" value="$actor.getId()" id="actor-$actor.getId()">$actor.getName()</input>
+        </label>
+      </div>
+    #end
+
+    <button type="submit" class="btn btn-success">Add actors</button>
+  </form>
+#end
+
+#if($movie.actors().size() > 0)
+
+  <h3>Here are all the actors in this movie:</h3>
+
+  <ul>
+    #foreach($actor in $movie.actors())
+      <li>$actor.getName()</li>
+    #end
+  </ul>
+#else
+  <p>There are no actors yet! <a href="/actors">Add actors here</a></p>
+#end
+
+
+<a href="/">Return to Main Page</a>
