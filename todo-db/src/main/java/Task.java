@@ -1,7 +1,9 @@
 import java.util.List;
 import org.sql2o.*;
 
-public class Task {
+public class Task implements Saveable {
+  public static String DB_NAME = "tasks";
+
   private int id;
   private int categoryId;
   private String description;
@@ -38,11 +40,9 @@ public class Task {
   }
 
 
+  @Override
   public static List<Task> all() {
-    String sql = "SELECT id, description, categoryId FROM Tasks";
-    try(Connection con = DB.sql2o.open()) {
-      return con.createQuery(sql).executeAndFetch(Task.class);
-    }
+    super();
   }
 
   public void save() {

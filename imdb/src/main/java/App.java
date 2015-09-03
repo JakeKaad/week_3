@@ -78,19 +78,19 @@ public class App {
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
 
-post("/movies/:id", (request, response) -> {
-  HashMap<String, Object> model = new HashMap<String, Object>();
-  Movie foundMovie = Movie.find(Integer.parseInt(request.params("id")));
+    post("/movies/:id", (request, response) -> {
+      HashMap<String, Object> model = new HashMap<String, Object>();
+      Movie foundMovie = Movie.find(Integer.parseInt(request.params("id")));
 
-  QueryParamsMap actorIds = request.queryMap("actor-ids");
-    for (String id : actorIds.values()) {
-      foundMovie.update(Integer.parseInt(id));
-    }
+      QueryParamsMap actorIds = request.queryMap("actor-ids");
+        for (String id : actorIds.values()) {
+          foundMovie.update(Integer.parseInt(id));
+        }
 
-  model.put("movie", foundMovie);
-  model.put("actors", Actor.all());
-  model.put("template", "templates/movie-info.vtl");
-  return new ModelAndView(model, layout);
-}, new VelocityTemplateEngine());
+      model.put("movie", foundMovie);
+      model.put("actors", Actor.all());
+      model.put("template", "templates/movie-info.vtl");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
   }
 }
